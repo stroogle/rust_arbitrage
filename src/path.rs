@@ -4,9 +4,9 @@ use crate::Ticker;
 use std::collections::HashMap;
 
 pub struct Path {
-    first_trade: String,
-    second_trade: String,
-    third_trade: String,
+    pub first_trade: String,
+    pub second_trade: String,
+    pub third_trade: String,
 }
 
 impl Path {
@@ -40,11 +40,11 @@ impl Path {
             return Err("Not enough trade routes".to_string());
         }
 
-        Ok(Path {
-            first_trade: tick_vec[0].clone(),
-            second_trade: tick_vec[1].clone(),
-            third_trade: tick_vec[2].clone()
-        })
+        Ok(Path::new(
+            tick_vec[0].clone(),
+            tick_vec[1].clone(),
+            tick_vec[2].clone()
+        ))
     }
 
     pub fn load_paths(path: String) -> Vec<Path> {
