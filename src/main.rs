@@ -4,6 +4,7 @@
 mod path;
 mod binance;
 mod ticker;
+mod ticker_list;
 
 // Uses here
 use binance::Binance;
@@ -15,10 +16,14 @@ use std::time;
 use std::sync::{Arc};
 use std::thread;
 use std::collections::HashMap;
+use ticker_list::TickerList;
+use path::Path;
 
 fn main() {
     
-    let all_tickers: Arc<HashMap<String, Ticker>> = Arc::new(HashMap::new());
+    // let all_tickers: Arc<HashMap<String, Ticker>> = Arc::new(HashMap::new());
+    let all_tickers: Arc<HashMap<String, Ticker>> = Arc::new(TickerList::get_ticker_hashmap("./trade.tickers"));
+    let all_paths = Path::load_paths("./trade.paths");
     let mut second_thread = Arc::clone(&all_tickers);
 
     let mut socket = Binance::new(
@@ -31,8 +36,8 @@ fn main() {
         "method": "SUBSCRIBE",
         "params":
         [
-            "btcusdt@bookTicker",
-            "bnbusdt@bookTicker"
+            "ethdai@bookTicker",
+            "bnbdai@bookTicker"
         ],
         "id": 1
     }"#.into())).expect("Uh oh!");
@@ -42,10 +47,19 @@ fn main() {
     thread::spawn(move || {
         loop {
             // println!("Other thread looping");
-            for(key, value) in second_thread.iter() {
-               println!("[OTHER THREAD] {} is trading at: {}", key, value.asking_price);
+            let start = time::Instant::now();
+            // for(key, value) in second_thread.iter() {
+            //    println!("[OTHER THREAD] {} is trading at: {}", key, value.asking_price);
+            // }
+
+            for path in all_paths.iter() {
+                // if path.is_profitable() {
+                //     path.execute(init_value);
+                // }
+                println!("[OTHER THREAD] {}", path.to_string());
             }
-            thread::sleep(time::Duration::from_millis(100));
+            println!("{}", start.elapsed().as_millis());
+            // thread::sleep(time::Duration::from_millis(100));
         }
     });
 
@@ -64,14 +78,19 @@ fn main() {
             continue;
         }
         
-        let tick = Ticker::new(msg_as_string).unwrap_or_else(|_err| {
-            process::exit(1)
-        });
 
-        println!("[MAIN THREAD] {} is at an asking price of {}", tick.symbol, tick.asking_price);
+
+        // let tick = Ticker::new("Bruh", "other bruh");
+
+        // println!("[MAIN THREAD] {} is at an asking price of {}", tick.symbol, tick.asking_price);
         unsafe {
             let t = Arc::get_mut_unchecked(&mut main_thread);
-            t.insert(tick.symbol.clone(), tick);
+            // t.insert(tick.symbol.clone(), tick);
+            println!("{}", &msg_as_string);
+            let ticker = t.get_mut(&Ticker::parse_symbol_from_json(&msg_as_string)).unwrap();
+
+            ticker.update(msg_as_string);
+
         }
 
     }
