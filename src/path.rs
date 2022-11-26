@@ -24,6 +24,7 @@ impl Path {
     }
 
     pub fn is_profitable(&self, map: &HashMap<String, Ticker>) -> bool {
+        
         false
     }
 
@@ -47,7 +48,7 @@ impl Path {
         ))
     }
 
-    pub fn load_paths(path: String) -> Vec<Path> {
+    pub fn load_paths(path: &str) -> Vec<Path> {
         let file = fs::read_to_string(path).unwrap_or_else(|_err| {
             process::exit(1);
         });
@@ -71,13 +72,13 @@ mod tests {
 
     #[test]
     fn test_load_paths() {
-        let t = Path::load_paths("./trade.paths".to_string());
+        let t = Path::load_paths("./trade.paths");
         // assert_eq!(t.len(), 44);
     }
 
     #[test]
     fn test_path_loop_speed() {
-        let paths = Path::load_paths("./trade.paths".to_string());
+        let paths = Path::load_paths("./trade.paths");
 
         let start = time::Instant::now();
         for path in paths.iter() {
@@ -108,13 +109,14 @@ mod tests {
         let mut tickers: HashMap<String, Ticker> = HashMap::new();
         tickers.insert(
             path_1.first_trade.clone(),
-            Ticker {
-                symbol: "BNBBUSD".to_string(),
-                asking_price: 1.00000,
-                asking_qty: 1.00000,
-                bid_price: 1.00000,
-                bid_qty: 1.00000
-            }
+            Ticker::new("BNB", "BUSD")
+            // Ticker {
+            //     symbol: "BNBBUSD".to_string(),
+            //     asking_price: 1.00000,
+            //     asking_qty: 1.00000,
+            //     bid_price: 1.00000,
+            //     bid_qty: 1.00000
+            // }
         );
         // True
 
