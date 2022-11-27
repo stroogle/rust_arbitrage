@@ -5,6 +5,7 @@ mod path;
 mod binance;
 mod ticker;
 mod ticker_list;
+mod money_safe_math;
 
 // Uses here
 use binance::Binance;
@@ -27,7 +28,7 @@ fn main() {
     let mut second_thread = Arc::clone(&all_tickers);
 
     let mut socket = Binance::new(
-        Url::parse("wss://stream.binance.com:9443/ws").unwrap(),
+        Url::parse("wss://testnet.binance.vision/ws").unwrap(),
         "bruh".to_string().clone(),
         Vec::new()
     );
@@ -36,8 +37,55 @@ fn main() {
         "method": "SUBSCRIBE",
         "params":
         [
+            "bnbeth@bookTicker",
+            "ethusdt@bookTicker",
+            "etceth@bookTicker",
+            "zeceth@bookTicker",
+            "xrpeth@bookTicker",
+            "bnbusdt@bookTicker",
+            "xmreth@bookTicker",
+            "adaeth@bookTicker",
+            "ltceth@bookTicker",
+            "ltcusdt@bookTicker",
+            "ltcbnb@bookTicker",
+            "adausdt@bookTicker",
+            "adabnb@bookTicker",
+            "xrpusdt@bookTicker",
+            "xrpbnb@bookTicker",
+            "etcusdt@bookTicker",
+            "etcbnb@bookTicker",
+            "xmrbnb@bookTicker",
+            "xmrusdt@bookTicker",
+            "zecbnb@bookTicker",
+            "zecusdt@bookTicker",
+            "maticbnb@bookTicker",
+            "maticusdt@bookTicker",
+            "algobnb@bookTicker",
+            "algousdt@bookTicker",
+            "bnbbusd@bookTicker",
+            "busdusdt@bookTicker",
+            "xrpbusd@bookTicker",
+            "ethbusd@bookTicker",
+            "ltcbusd@bookTicker",
+            "etcbusd@bookTicker",
+            "adabusd@bookTicker",
+            "algobusd@bookTicker",
+            "xmrbusd@bookTicker",
+            "zecbusd@bookTicker",
+            "solbnb@bookTicker",
+            "solusdt@bookTicker",
+            "solbusd@bookTicker",
+            "maticbusd@bookTicker",
             "ethdai@bookTicker",
-            "bnbdai@bookTicker"
+            "bnbdai@bookTicker",
+            "usdtdai@bookTicker",
+            "busddai@bookTicker",
+            "cakebnb@bookTicker",
+            "cakebusd@bookTicker",
+            "cakeusdt@bookTicker",
+            "soleth@bookTicker",
+            "maticeth@bookTicker",
+            "algoeth@bookTicker"
         ],
         "id": 1
     }"#.into())).expect("Uh oh!");
@@ -58,7 +106,7 @@ fn main() {
                 // }
                 println!("[OTHER THREAD] {}", path.to_string());
             }
-            println!("{}", start.elapsed().as_millis());
+            // println!("{}", start.elapsed().as_millis());
             // thread::sleep(time::Duration::from_millis(100));
         }
     });

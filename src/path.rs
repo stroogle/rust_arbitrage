@@ -24,8 +24,19 @@ impl Path {
     }
 
     pub fn is_profitable(&self, map: &HashMap<String, Ticker>) -> bool {
-        
+        // Base amount
+        // Calculate potential
+        // return if potential is 0.4% more than base amount
         false
+    }
+
+    pub fn calculate_potential(&self, amount: f64) -> f64 {
+        // Store base amount
+        // Calulate first trasnaction
+        // Calulate second trasnaction
+        // Calulate third trasnaction
+        // Return the result of the third transaction
+        1.0
     }
 
     pub fn parse_from_line(line: String) -> Result<Path, String> {

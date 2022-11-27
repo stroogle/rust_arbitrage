@@ -73,7 +73,17 @@ impl Ticker {
         self.bid_price= Ticker::parse_float(res["b"].to_string());
         self.bid_qty= Ticker::parse_float(res["B"].to_string());
     }
- }
+ 
+    // pub fn calculate_buy_base_asset(quote_qty: u32) -> Result<u32, &str> {
+    //     // Quote asset / Ask price
+    //     // If amount is larger than amount available then error
+    // }
+
+    // pub fn calculate_sell_base_asset(base_qty: u32) -> Result<u32, &str> {
+    //     // base qunatity * bid price
+    //     // If amount is larger than amount available then error
+    // }
+}
 
  #[cfg(test)]
  mod tests {
